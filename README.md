@@ -10,6 +10,10 @@
 #### Start Development server
 
 ```bash
+cd frontend
+npm install
+cd ..
+npm install
 npm run dev
 ```
 
