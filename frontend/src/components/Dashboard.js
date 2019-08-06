@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../actions/authActions";
+import { Link } from "react-router-dom";
 
 class Dashboard extends Component {
   
@@ -23,7 +24,14 @@ class Dashboard extends Component {
                 You are logged in.
               </p>
             </h4>
-            <button
+            <Link to="/create_test">
+              <button
+                className="btn waves-effect waves-light hoverable blue"
+              >
+                Create Test
+              </button>
+            </Link>
+            <button style={{marginLeft: "50px"}}
               onClick={this.onLogoutClick}
               className="btn waves-effect waves-light hoverable blue"
             >

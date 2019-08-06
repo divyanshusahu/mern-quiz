@@ -11,8 +11,7 @@ const TestSchema = new Schema({
     required: true
   },
   questions: {
-    type: Object,
-    required: true
+    type: Object
   },
   date: {
     type: Date,

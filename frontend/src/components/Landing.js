@@ -8,16 +8,12 @@ class Landing extends Component {
         className="container"
       >
         <div className="row">
-          <div className="col s12 align-center">
-            <h5>Basic Auth using MERN stack</h5>
-          </div>
-          
-          <div className="col s6">
-            <Link to="/login"
-              className="btn btn-large btn-flat waves-effect white black-text"
-            >
-              Log In
-            </Link>
+          <div className="col s12">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">List of available Quiz</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
