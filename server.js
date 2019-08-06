@@ -2,36 +2,38 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
-const path = require("path")
+const path = require("path");
 
 const users = require("./routes/api/users");
+const tests = require("./routes/api/tests");
 
 const app = express();
 
 app.use(
-	bodyParser.urlencoded({
-		extended: false
-	})
+  bodyParser.urlencoded({
+    extended: false
+  })
 );
 app.use(bodyParser.json());
 
 const db = require("./config/keys").mongoURI;
 
-mongoose.connect(
-	db,
-	{ useNewUrlParser: true}
-).then(() => console.log("Connected to Mongo Database")).catch((err) => console.log(err));
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log("Connected to Mongo Database"))
+  .catch(err => console.log(err));
 
 app.use(passport.initialize());
 require("./config/passport")(passport);
 app.use("/api/users", users);
+app.use("/api/tests", tests);
 
-if (process.env.NODE_ENV === 'production') {
-	app.use(express.static('frontend/build'));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
 
-	app.get("*", (req, res) => {
-		req.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
-	});
+  app.get("*", (req, res) => {
+    req.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+  });
 }
 
 const port = process.env.PORT || 5000;

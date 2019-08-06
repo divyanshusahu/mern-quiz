@@ -9,7 +9,10 @@ const store = createStore(
   initialState,
   compose(
     applyMiddleware(...middleware),
-    window.__REDUX_DEVTOOLS_EXTENSION__COMPOSE && window.__REDUX_DEVTOOLS_EXTENSION__COMPOSE() || compose
+    // eslint-disable-next-line
+    (window.__REDUX_DEVTOOLS_EXTENSION__COMPOSE &&
+      window.__REDUX_DEVTOOLS_EXTENSION__COMPOSE()) ||
+      compose
   )
 );
 
