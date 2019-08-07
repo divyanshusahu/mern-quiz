@@ -9,7 +9,7 @@ export default function (state = initialState, action) {
     case CREATE_QUIZ:
       return {
         ...state,
-        status: action.payload
+        data: action.payload
       };
     default:
       return state

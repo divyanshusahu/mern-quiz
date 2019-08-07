@@ -15,6 +15,7 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./components/Dashboard";
 import CreateTest from "./components/quiz/CreateTest";
+import AttendQuiz from "./components/quiz/AttendQuiz";
 
 if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;
@@ -35,6 +36,7 @@ class App extends Component {
         <Router>
           <div className="wrapper">
             <Navbar />
+            <Route exact path="/test/*" component={AttendQuiz} />
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />

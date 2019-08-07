@@ -6,6 +6,7 @@ import { createQuiz } from "../actions/createTestActions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../assets/css/Modal.css";
+import axios from "axios";
 
 ReactModal.setAppElement("#root");
 
@@ -19,7 +20,8 @@ class Dashboard extends Component {
     super();
     this.state = {
       showModal: false,
-      create_quiz_name: ""
+      create_quiz_name: "",
+      user_precreated_tests: []
     };
 
     this.onLogoutClick = this.onLogoutClick.bind(this);
@@ -28,8 +30,17 @@ class Dashboard extends Component {
     this.onChangeInput = this.onChangeInput.bind(this);
   }
 
+  componentDidMount() {
+    var userData ={
+      owner_email: this.props.auth.user.email
+    }
+    axios.post("/api/list_of_tests/list_by_email", userData).then((res) => {
+      this.setState({ user_precreated_tests: res.data.list_by_email });
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.create_quiz.status === "Success") {
+    if (nextProps.create_quiz.data.status === "Success") {
       toast.success("Quiz Created Successfully", {
         position: toast.POSITION.TOP_CENTER
       });
@@ -38,7 +49,7 @@ class Dashboard extends Component {
       }, 5500);
     }
     else {
-      toast.error(nextProps.create_quiz.status, {
+      toast.error(nextProps.create_quiz.data.status, {
         position: toast.POSITION.TOP_CENTER
       });
     }
@@ -73,6 +84,14 @@ class Dashboard extends Component {
 
   render() {
     const { user } = this.props.auth;
+
+    const created_tests = this.state.user_precreated_tests.map((test) => {
+      return (
+        <div className="col s3" key={test._id}>
+          <p>{test.test_name}</p>
+        </div>
+      );
+    });
 
     return (
       <div className="container">
@@ -125,6 +144,9 @@ class Dashboard extends Component {
               </button>
             </ReactModal>
           </div>
+        </div>
+        <div className="row">
+          {created_tests}
         </div>
       </div>
     );

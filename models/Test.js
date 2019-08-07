@@ -10,9 +10,7 @@ const TestSchema = new Schema({
     type: String,
     required: true
   },
-  questions: {
-    type: Object
-  },
+  questions: [{}],
   date: {
     type: Date,
     default: Date.now()

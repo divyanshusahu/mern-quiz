@@ -17,6 +17,6 @@ export const createQuiz = (userData) => dispatch => {
 export const setQuizId = (data) => {
   return {
     type: CREATE_QUIZ,
-    payload: data.status
+    payload: data
   }
 }
