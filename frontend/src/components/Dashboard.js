@@ -2,20 +2,46 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ReactModal from "react-modal";
+import { createQuiz } from "../actions/createTestActions";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../assets/css/Modal.css";
 
 ReactModal.setAppElement("#root");
+
+toast.configure({
+  autoClose: 5000,
+  draggable: false
+})
 
 class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
-      showModal: false
+      showModal: false,
+      create_quiz_name: ""
     };
 
     this.onLogoutClick = this.onLogoutClick.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.onChangeInput = this.onChangeInput.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.create_quiz.status === "Success") {
+      toast.success("Quiz Created Successfully", {
+        position: toast.POSITION.TOP_CENTER
+      });
+      setTimeout(() => {
+        this.props.history.push("/addquiz")
+      }, 5500);
+    }
+    else {
+      toast.error(nextProps.create_quiz.status, {
+        position: toast.POSITION.TOP_CENTER
+      });
+    }
   }
 
   onLogoutClick = e => {
@@ -31,9 +57,19 @@ class Dashboard extends Component {
     this.setState({ showModal: false });
   }
 
-  onChangeInput = (e) => {
-    this.setState({ [e.target.id]: [e.target.value ] })
-  }
+  onChangeInput = e => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+
+    const newQuiz = {
+      test_name: this.state.create_quiz_name,
+      owner_email: this.props.auth.user.email
+    };
+    this.props.createQuiz(newQuiz);
+  };
 
   render() {
     const { user } = this.props.auth;
@@ -62,15 +98,25 @@ class Dashboard extends Component {
               overlayClassName="Overlay"
               closeTimeoutMS={2000}
             >
-              <div className="input-field">
-                <input id="create_quiz_name" type="text" onChange={this.onChangeInput} />
-                <label htmlFor="first_name">Quiz Name</label>
-              </div>
-              <button
-                className="btn btn-small waves-effect waves-light"
-              >
-                Create Quiz
-              </button>
+              <form noValidate onSubmit={this.onSubmit}>
+                <div className="input-field">
+                  <input
+                    id="create_quiz_name"
+                    type="text"
+                    onChange={this.onChangeInput}
+                    name="create_quiz_name"
+                    value={this.state.create_quiz_name}
+                    required
+                  />
+                  <label htmlFor="first_name">Quiz Name</label>
+                </div>
+                <button
+                  className="btn btn-small waves-effect waves-light"
+                  type="submit"
+                >
+                  Create Quiz
+                </button>
+              </form>
               <button
                 onClick={this.handleCloseModal}
                 className="btn btn-small waves-effect waves-light right"
@@ -86,11 +132,17 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  create_quiz: PropTypes.object.isRequired,
+  createQuiz: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  create_quiz: state.create_quiz
 });
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(
+  mapStateToProps,
+  { createQuiz }
+)(Dashboard);
