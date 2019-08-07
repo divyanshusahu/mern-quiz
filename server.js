@@ -6,8 +6,6 @@ const path = require("path");
 
 const users = require("./routes/api/users");
 const tests = require("./routes/api/tests");
-const list_of_tests = require("./routes/api/list_of_tests");
-const attend_quiz = require("./routes/api/attend_quiz");
 
 const app = express();
 
@@ -29,8 +27,6 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/tests", tests);
-app.use("/api/list_of_tests", list_of_tests);
-app.use("/api/attend_quiz", attend_quiz);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("frontend/build"));

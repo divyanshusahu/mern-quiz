@@ -7,13 +7,14 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../assets/css/Modal.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 ReactModal.setAppElement("#root");
 
 toast.configure({
   autoClose: 5000,
   draggable: false
-})
+});
 
 class Dashboard extends Component {
   constructor() {
@@ -24,17 +25,16 @@ class Dashboard extends Component {
       user_precreated_tests: []
     };
 
-    this.onLogoutClick = this.onLogoutClick.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
   }
 
   componentDidMount() {
-    var userData ={
+    var userData = {
       owner_email: this.props.auth.user.email
-    }
-    axios.post("/api/list_of_tests/list_by_email", userData).then((res) => {
+    };
+    axios.post("/api/tests/list_by_email", userData).then(res => {
       this.setState({ user_precreated_tests: res.data.list_by_email });
     });
   }
@@ -45,20 +45,16 @@ class Dashboard extends Component {
         position: toast.POSITION.TOP_CENTER
       });
       setTimeout(() => {
-        this.props.history.push("/addquiz")
+        this.props.history.push(
+          "/create_test/" + nextProps.create_quiz.data.test.test_name
+        );
       }, 5500);
-    }
-    else {
+    } else {
       toast.error(nextProps.create_quiz.data.status, {
         position: toast.POSITION.TOP_CENTER
       });
     }
   }
-
-  onLogoutClick = e => {
-    e.preventDefault();
-    this.props.logoutUser();
-  };
 
   handleOpenModal() {
     this.setState({ showModal: true });
@@ -85,10 +81,25 @@ class Dashboard extends Component {
   render() {
     const { user } = this.props.auth;
 
-    const created_tests = this.state.user_precreated_tests.map((test) => {
+    const created_tests = this.state.user_precreated_tests.map(test => {
       return (
-        <div className="col s3" key={test._id}>
-          <p>{test.test_name}</p>
+        <div className="col s12 m4" key={test._id}>
+          <div className="card z-depth-1">
+            <div className="card-content">
+              <Link to={"/create_test/" + test.test_name}>
+                <span
+                  className="card-title blue-text"
+                  style={{ cursor: "pointer" }}
+                >
+                  {test.test_name}
+                </span>
+              </Link>
+              <p>No. of Questions: {test.questions.length}</p>
+            </div>
+            <div className="card-action">
+              <p>{test.date}</p>
+            </div>
+          </div>
         </div>
       );
     });
@@ -115,8 +126,14 @@ class Dashboard extends Component {
               onRequestClose={this.handleCloseModal}
               className="Modal"
               overlayClassName="Overlay"
-              closeTimeoutMS={2000}
+              closeTimeoutMS={500}
             >
+              <button
+                onClick={this.handleCloseModal}
+                className="btn btn-small btn-flat waves-effect waves-light right"
+              >
+                <i className="material-icons">close</i>
+              </button>
               <form noValidate onSubmit={this.onSubmit}>
                 <div className="input-field">
                   <input
@@ -125,9 +142,8 @@ class Dashboard extends Component {
                     onChange={this.onChangeInput}
                     name="create_quiz_name"
                     value={this.state.create_quiz_name}
-                    required
                   />
-                  <label htmlFor="first_name">Quiz Name</label>
+                  <label htmlFor="create_quiz_name">Quiz Name</label>
                 </div>
                 <button
                   className="btn btn-small waves-effect waves-light"
@@ -136,18 +152,11 @@ class Dashboard extends Component {
                   Create Quiz
                 </button>
               </form>
-              <button
-                onClick={this.handleCloseModal}
-                className="btn btn-small waves-effect waves-light right"
-              >
-                Close
-              </button>
             </ReactModal>
           </div>
         </div>
-        <div className="row">
-          {created_tests}
-        </div>
+        <p>Your created tests</p>
+        <div className="row">{created_tests}</div>
       </div>
     );
   }

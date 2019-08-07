@@ -10,8 +10,8 @@ class AttendQuiz extends Component {
   }
 
   componentDidMount() {
-    let t = window.location.pathname.split("/")[2];
-    let url = "/api/attend_quiz/test/"+t;
+    let t = unescape(window.location.pathname.split("/")[2]);
+    let url = "/api/tests/test/" + t;
     axios.get(url).then(res => {
       this.setState({ test: res.data.test });
     });
@@ -24,10 +24,10 @@ class AttendQuiz extends Component {
           <div className="col s12">
             <div className="card z-depth-0">
               <div className="card-content">
-                <span className="card-title">Quiz Name: {this.state.test.test_name}</span>
-                <p>
-                  Created By: {this.state.test.owner_email}
-                </p>
+                <span className="card-title">
+                  Quiz Name: {this.state.test.test_name}
+                </span>
+                <p>Created By: {this.state.test.owner_email}</p>
               </div>
             </div>
           </div>

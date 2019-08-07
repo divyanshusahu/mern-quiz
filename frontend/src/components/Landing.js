@@ -11,7 +11,7 @@ class Landing extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/list_of_tests/list_tests").then(res => {
+    axios.get("/api/tests/list_tests").then(res => {
       this.setState({ available_tests: res.data.tests });
     });
   }
@@ -19,10 +19,10 @@ class Landing extends Component {
   render() {
     const available_tests = this.state.available_tests.map(test => {
       return (
-        <div className="col s4" key={test._id}>
+        <div className="col s12 m4" key={test._id}>
           <div className="card z-depth-1">
             <div className="card-content">
-              <Link to={"/test/"+test.test_name}>
+              <Link to={"/test/" + test.test_name}>
                 <span
                   className="card-title blue-text"
                   style={{ cursor: "pointer" }}
