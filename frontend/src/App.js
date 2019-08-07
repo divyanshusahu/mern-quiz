@@ -8,13 +8,13 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 
 import './assets/css/App.css';
 
-import Navbar from "./components/Navbar";
+import Navbar from "./components/layout/Navbar";
 import Landing from "./components/Landing";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./components/Dashboard";
-import CreateTest from "./components/CreateTest";
+import CreateTest from "./components/quiz/CreateTest";
 
 if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;

@@ -1,18 +1,16 @@
-import React, { Component } from "react"
-import { Link, withRouter } from "react-router-dom";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerUser } from "../actions/authActions";
+import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
-class Register extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
-      name: "",
       email: "",
       password: "",
-      password2: "",
       errors: {}
     };
   }
@@ -24,6 +22,9 @@ class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard"); // push user to dashboard when they login
+    }
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
@@ -38,18 +39,16 @@ class Register extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const newUser = {
-      name: this.state.name,
+    const userData = {
       email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2
+      password: this.state.password
     };
-    this.props.registerUser(newUser, this.props.history);
+    this.props.loginUser(userData);
   };
-  
+
   render() {
     const { errors } = this.state;
-    
+
     return (
       <div className="container" style={{ flexGrow: 1 }}>
         <div className="row">
@@ -62,28 +61,13 @@ class Register extends Component {
             </Link>
 
             <div className="col s12">
-              <h5>Register below</h5>
-              <p>Already have an account?
-                <Link to="/login"> Login</Link>
+              <h5>Login below</h5>
+              <p>Don't have an account?
+                <Link to="/register"> Register</Link>
               </p>
             </div>
 
             <form noValidate onSubmit={this.onSubmit}>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.name}
-                  error={errors.name}
-                  id="name"
-                  type="text"
-                  name="name"
-                  className={classnames("", {
-                    invalid: errors.name
-                  })}
-                />
-                <label htmlFor="name">Name</label>
-                <span className="red-text">{errors.name}</span>
-              </div>
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
@@ -93,11 +77,14 @@ class Register extends Component {
                   type="text"
                   name="email"
                   className={classnames("", {
-                    invalid: errors.email
+                    invalid: errors.email || errors.emailnotfound
                   })}
                 />
                 <label htmlFor="email">Email</label>
-                <span className="red-text">{errors.email}</span>
+                <span className="red-text">
+                  {errors.email}
+                  {errors.emailnotfound}
+                </span>
               </div>
               <div className="input-field col s12">
                 <input
@@ -108,33 +95,21 @@ class Register extends Component {
                   type="password"
                   name="password"
                   className={classnames("", {
-                    invalid: errors.password
+                    invalid: errors.password || errors.passwordincorrect
                   })}
                 />
                 <label htmlFor="password">Password</label>
-                <span className="red-text">{errors.password}</span>
+                <span className="red-text">
+                  {errors.password}
+                  {errors.passwordincorrect}
+                </span>
               </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.password2}
-                  error={errors.password2}
-                  id="password2"
-                  type="password"
-                  name="password2"
-                  className={classnames("", {
-                    invalid: errors.password2
-                  })}
-                />
-                <label htmlFor="password2">Confirm Password</label>
-                <span className="red-text">{errors.password2}</span>
-              </div>
-              
+
               <button
                 type="submit"
-                className="btn waves-effect hoverable blue"
+                className="btn waves-effect waves-light hoverable blue"
               >
-                Sign Up
+                Login
               </button>
             </form>
           </div>
@@ -144,8 +119,8 @@ class Register extends Component {
   }
 }
 
-Register.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -157,5 +132,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
-)(withRouter(Register));
+  { loginUser }
+)(Login);

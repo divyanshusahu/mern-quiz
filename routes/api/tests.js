@@ -6,11 +6,10 @@ const Test = require("../../models/Test");
 router.post("/create_test", (req, res) => {
   const newTest = new Test({
     test_name: req.body.test_name,
-    owner_email: req.body.email,
-    questions: req.body.questions
+    owner_email: req.body.email
   });
 
-  newTest.save().then(req => res.json({ status: "Success" }));
+  newTest.save().then(() => res.json({ status: "Success" }));
 });
 
 module.exports = router;
