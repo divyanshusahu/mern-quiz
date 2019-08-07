@@ -1,4 +1,6 @@
-# Basic Auth using MERN Stack
+# Basic Quiz App
+
+**[Live Demo](https://xyz-mern-stack.herokuapp.com/)**
 
 #### Features
 
@@ -6,6 +8,8 @@
 - Login
 - Protected page only visible to logged in users
 - Logout
+- Authenticated user can add quiz
+- Any user can attend the quiz
 
 #### Start Development server
 
@@ -23,11 +27,5 @@ An Account on [mLab](https://mlab.com/). Get your [MongoDB URI](https://docs.mla
 
 ```bash
 export MLAB_URI="YOUR_URI_HERE"
+export SECRET="a_very_long_secret"
 ```
-
-> Tested on Chrome
-
-**Chrome Extensions Required**
-
-- [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
-- [Redux Dev Tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)

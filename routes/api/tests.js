@@ -60,7 +60,6 @@ router.post("/add_question", (req, res) => {
   Test.findOne({ test_name: req.body.test_name }).then(test => {
     insert_question = test.questions;
     insert_question.push(newQuestion);
-    console.log(insert_question);
     Test.findOneAndUpdate(
       { test_name: req.body.test_name },
       { $set: { questions: insert_question } },

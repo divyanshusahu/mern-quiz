@@ -3,8 +3,10 @@
   height: auto;
   min-height: 200px;
   background-color: #fff;
-  margin: 10em auto;
+  margin: 8em auto;
   padding: 1em;
+  overflow: auto;
+  z-index: 9999;
 }
 
 .Overlay {
