@@ -32,7 +32,7 @@ class Landing extends Component {
               </Link>
               <p>Created by: {test.owner_email}</p>
               <p>
-                No. of Questions: {test.questions ? "0" : test.questions.length}
+                No. of Questions: {test.questions.length}
               </p>
             </div>
             <div className="card-action">
